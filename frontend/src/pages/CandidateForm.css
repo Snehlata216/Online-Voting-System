@@ -1,0 +1,119 @@
+/* CandidateForm.css */
+/* Scoped styles for CandidateForm only */
+
+.candidate-page {
+    padding: 24px;
+    max-width: 700px;
+    margin: 0 auto;
+    color: #e2e8f0;
+    font-family: "Segoe UI", system-ui, sans-serif;
+}
+
+.candidate-heading {
+    font-size: 1.6rem;
+    color: #10b981;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.candidate-form {
+    display: grid;
+    gap: 18px;
+    background: #1e293b;
+    padding: 24px;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+}
+
+.form-row {
+    display: grid;
+    gap: 6px;
+}
+
+.form-row label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #cbd5e1;
+}
+
+.form-input {
+    background: #0f172a;
+    color: #e2e8f0;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 14px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: #10b981;
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.25);
+}
+
+textarea.form-input {
+    resize: vertical;
+    min-height: 90px;
+}
+
+.form-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+}
+
+.btn-primary {
+    background: #10b981;
+    color: #071022;
+    border: none;
+    padding: 10px 18px;
+    font-weight: 700;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.1s ease, box-shadow 0.2s ease;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(16, 185, 129, 0.25);
+}
+
+.btn-secondary {
+    background: #334155;
+    color: #e2e8f0;
+    border: none;
+    padding: 10px 18px;
+    font-weight: 600;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.btn-secondary:hover {
+    background: #475569;
+}
+
+.form-status {
+    font-size: 14px;
+    padding: 10px;
+    background: #133a34;
+    color: #a7f3d0;
+    border-radius: 8px;
+    text-align: center;
+}
+
+/* Responsive tweaks */
+@media (max-width: 600px) {
+    .form-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .btn-primary,
+    .btn-secondary {
+        width: 100%;
+        text-align: center;
+    }
+}

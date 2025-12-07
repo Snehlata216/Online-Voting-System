@@ -1,0 +1,40 @@
+/* Voters page styles */
+.voter-card {
+    background: #0e1426;
+    border: 1px solid #222a44;
+    border-radius: 12px;
+    padding: 16px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.voter-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+}
+
+.voter-name {
+    font-size: 18px;
+    font-weight: 600;
+    color: #10b981;
+}
+
+.voter-meta {
+    margin: 4px 0;
+    color: #cbd5e1;
+    font-size: 14px;
+}
+
+.voter-card-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.button.danger {
+    background: #ef4444;
+    color: #fff;
+}
+
+.button.danger:hover {
+    background: #dc2626;
+}

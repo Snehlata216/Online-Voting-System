@@ -1,0 +1,86 @@
+/* src/pages/FeedbackForm.css */
+
+.feedback-page {
+    padding: 24px;
+    max-width: 820px;
+    margin: 0 auto;
+    color: #e2e8f0;
+    font-family: "Segoe UI", system-ui, sans-serif;
+}
+
+.feedback-title {
+    font-size: 1.4rem;
+    color: #10b981;
+    margin-bottom: 12px;
+    text-align: center;
+}
+
+.feedback-form {
+    display: grid;
+    gap: 12px;
+    background: #0f172a;
+    padding: 18px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.feedback-input {
+    background: #071022;
+    color: #e2e8f0;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 8px;
+    padding: 10px;
+    font-size: 14px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.feedback-input.input-error {
+    border-color: #ef4444;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.06);
+}
+
+.form-actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 6px;
+}
+
+.btn-primary {
+    background: #10b981;
+    color: #071022;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.btn-primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.feedback-status {
+    margin-top: 8px;
+    text-align: center;
+    color: #cbd5e1;
+    padding: 8px 10px;
+    border-radius: 8px;
+}
+
+.feedback-status.success {
+    color: #064e3b;
+    background: rgba(16, 185, 129, 0.12);
+}
+
+.feedback-status.error {
+    color: #7f1d1d;
+    background: rgba(239, 68, 68, 0.06);
+}
+
+.error-msg {
+    color: #fecaca;
+    font-size: 13px;
+    margin-top: 6px;
+}

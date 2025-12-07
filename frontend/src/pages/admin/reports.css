@@ -1,0 +1,627 @@
+/* src/pages/admin/reports.css
+   Scoped styles for Reports pages.
+   All selectors are prefixed with .reports-page to avoid leaking into Results or other pages.
+*/
+
+/* Theme tokens (scoped to reports page) */
+.reports-page {
+    --bg: #f6f8fb;
+    --panel: #ffffff;
+    --text-strong: #071022;
+    --text-muted: #475569;
+    --accent: #0ea5a4;
+    --danger: #ef4444;
+    --card-border: #e6eef2;
+    --radius: 10px;
+    --container-width: 1100px;
+    --shadow: rgba(11, 18, 32, 0.06);
+    box-sizing: border-box;
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+/* Page container: centers content and sets readable width */
+.reports-page .reports-page__inner {
+    max-width: var(--container-width);
+    margin: 20px auto;
+    padding: 20px;
+    color: var(--text-strong);
+    background: linear-gradient(180deg, rgba(15, 23, 42, 0.02), rgba(15, 23, 42, 0));
+    line-height: 1.45;
+    position: relative;
+    z-index: 1000;
+}
+
+/* Header: layout for back button + title + right controls */
+.reports-page .reports-header {
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.reports-page .reports-header h1 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.reports-page .reports-header .muted {
+    color: var(--text-muted);
+    margin: 4px 0 0 0;
+    font-size: 13px;
+}
+
+/* Controls row (used on ReportsHome) */
+.reports-page .reports-controls .control-row {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+}
+
+/* Buttons: primary and secondary styles with hover/focus */
+.reports-page .btn-primary,
+.reports-page .btn-secondary {
+    border: none;
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.reports-page .btn-primary {
+    background: linear-gradient(180deg, var(--accent), #059fa0);
+    color: #fff;
+    box-shadow: 0 8px 24px rgba(14, 165, 164, 0.12);
+}
+
+.reports-page .btn-secondary {
+    background: #fff;
+    color: var(--text-strong);
+    border: 1px solid var(--card-border);
+}
+
+.reports-page .btn-primary:hover {
+    transform: translateY(-2px);
+}
+
+.reports-page .btn-secondary:hover {
+    background: #fbfdff;
+    transform: translateY(-2px);
+}
+
+.reports-page .btn-primary:focus,
+.reports-page .btn-secondary:focus {
+    outline: 3px solid rgba(14, 165, 164, 0.14);
+    outline-offset: 2px;
+}
+
+/* Summary cards: compact, readable metrics */
+.reports-page .summary-cards {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+}
+
+.reports-page .summary-cards .card {
+    background: var(--panel);
+    border-radius: var(--radius);
+    padding: 14px;
+    box-shadow: 0 8px 24px var(--shadow);
+    border: 1px solid var(--card-border);
+    min-width: 180px;
+    flex: 1 1 220px;
+}
+
+.reports-page .summary-cards .card strong {
+    display: block;
+    font-size: 16px;
+    margin-bottom: 6px;
+    color: var(--text-strong);
+}
+
+.reports-page .card .small {
+    color: var(--text-muted);
+    font-size: 13px;
+}
+
+/* Chart and table sections */
+.reports-page .chart-section,
+.reports-page .table-section {
+    margin-bottom: 18px;
+    background: transparent;
+}
+
+/* Table wrapper: panel for charts and tables */
+.reports-page .table-wrap {
+    background: var(--panel);
+    border-radius: 10px;
+    padding: 12px;
+    border: 1px solid var(--card-border);
+    box-shadow: 0 8px 24px var(--shadow);
+    overflow: auto;
+}
+
+/* Chart container: controlled height so charts don't dominate the page */
+.reports-page .chart-container {
+    width: 100%;
+    height: 320px;
+    max-height: 420px;
+    padding: 8px;
+    box-sizing: border-box;
+    background: var(--panel);
+    border-radius: 8px;
+    border: 1px solid var(--card-border);
+    box-shadow: 0 8px 24px var(--shadow);
+    margin: 8px 0;
+}
+
+.reports-page .chart-container.donut {
+    height: 300px;
+}
+
+.reports-page .chart-container.time-series {
+    height: 360px;
+}
+
+.reports-page .chart-container canvas {
+    max-width: 100% !important;
+    height: 100% !important;
+}
+
+/* Table styles: readable, aligned columns for votes/percent */
+.reports-page .table-wrap table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    min-width: 480px;
+}
+
+.reports-page .table-wrap th,
+.reports-page .table-wrap td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #f1f5f9;
+    text-align: left;
+    vertical-align: middle;
+    color: var(--text-strong);
+}
+
+.reports-page .table-wrap th {
+    background: #fbfdff;
+    font-weight: 700;
+    color: var(--text-strong);
+}
+
+.reports-page .table-wrap td:first-child {
+    white-space: normal;
+    max-width: 360px;
+}
+
+.reports-page .table-wrap td:nth-child(2),
+.reports-page .table-wrap td:nth-child(3) {
+    width: 110px;
+    text-align: right;
+    font-weight: 600;
+    color: var(--text-strong);
+}
+
+.reports-page .candidate-percent {
+    color: var(--accent);
+    font-weight: 700;
+}
+
+.reports-page .candidate-id {
+    display: block;
+    color: var(--text-muted);
+    font-size: 12px;
+    margin-top: 4px;
+}
+
+/* Preformatted debug blocks */
+.reports-page pre {
+    white-space: pre-wrap;
+    word-break: break-word;
+    background: #f8fafc;
+    border-radius: 8px;
+    padding: 12px;
+    border: 1px solid #e6eef2;
+    color: var(--text-strong);
+    font-size: 13px;
+    line-height: 1.45;
+    margin: 8px 0;
+    max-height: 420px;
+    overflow: auto;
+}
+
+/* Error banner */
+.reports-page .error-banner {
+    background: #fff5f5;
+    border: 1px solid rgba(239, 68, 68, 0.12);
+    color: var(--danger);
+    padding: 10px 12px;
+    border-radius: 8px;
+    margin: 12px 0;
+}
+
+/* Quick links cards */
+.reports-page .quick-links .cards {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.reports-page .quick-links .card {
+    cursor: pointer;
+    padding: 14px;
+    min-width: 220px;
+    background: linear-gradient(180deg, #ffffff, #fbfdff);
+    border-radius: 10px;
+    border: 1px solid var(--card-border);
+    box-shadow: 0 8px 24px var(--shadow);
+    transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+}
+
+.reports-page .quick-links .card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 18px 40px rgba(11, 18, 32, 0.08);
+    border-color: rgba(14, 165, 164, 0.08);
+}
+
+.reports-page .quick-links .card strong {
+    display: block;
+    font-size: 15px;
+    margin-bottom: 6px;
+    color: var(--text-strong);
+}
+
+.reports-page .quick-links .card p {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin: 0;
+}
+
+/* Scoped turnout page rules */
+.reports-page .turnout-page {
+    visibility: visible !important;
+    opacity: 1 !important;
+    max-height: none !important;
+    overflow: visible !important;
+    position: relative;
+    z-index: 1200;
+    padding-bottom: 18px;
+}
+
+.reports-page .turnout-page .reports-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.reports-page .turnout-page .turnout-empty {
+    padding: 18px;
+    background: var(--panel);
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+    color: var(--text-muted);
+    box-shadow: 0 8px 24px rgba(11, 18, 32, 0.04);
+    font-size: 15px;
+}
+
+.reports-page .turnout-page .turnout-table-wrap {
+    margin-top: 12px;
+    background: var(--panel);
+    border-radius: 10px;
+    padding: 12px;
+    border: 1px solid var(--card-border);
+    box-shadow: 0 8px 24px rgba(11, 18, 32, 0.04);
+    overflow: auto;
+}
+
+.reports-page .turnout-page table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.reports-page .turnout-page th,
+.reports-page .turnout-page td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #f1f5f9;
+    text-align: left;
+    vertical-align: middle;
+    color: var(--text-strong);
+}
+
+.reports-page .turnout-page th {
+    background: #fbfdff;
+    font-weight: 700;
+}
+
+.reports-page .turnout-page td:first-child {
+    white-space: normal;
+    max-width: 360px;
+}
+
+.reports-page .turnout-page td:nth-child(2),
+.reports-page .turnout-page td:nth-child(3),
+.reports-page .turnout-page td:nth-child(4) {
+    width: 110px;
+    text-align: right;
+    font-weight: 600;
+    color: var(--text-strong);
+}
+
+.reports-page .turnout-page .turnout-chart {
+    margin-top: 12px;
+    background: var(--panel);
+    border-radius: 10px;
+    padding: 12px;
+    border: 1px solid var(--card-border);
+    box-shadow: 0 8px 24px rgba(11, 18, 32, 0.04);
+    height: 320px;
+    box-sizing: border-box;
+}
+
+.reports-page .turnout-page .turnout-chart canvas {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.reports-page .turnout-page pre {
+    margin-top: 12px;
+    background: #f8fafc;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 13px;
+    color: var(--text-strong);
+    max-height: 260px;
+    overflow: auto;
+}
+
+.reports-page .turnout-page tbody tr {
+    transition: background .12s ease, transform .08s ease;
+    cursor: default;
+}
+
+.reports-page .turnout-page tbody tr:hover,
+.reports-page .turnout-page tbody tr:focus-within {
+    background: rgba(14, 165, 164, 0.03);
+    transform: translateY(-1px);
+}
+
+/* Feedback report tweaks (scoped) */
+.reports-page .table-wrap td {
+    word-break: break-word;
+    white-space: normal;
+}
+
+.reports-page .table-wrap td:nth-child(3) {
+    max-width: 640px;
+    color: var(--text-strong);
+    font-size: 14px;
+}
+
+.reports-page .table-wrap td:nth-child(2) {
+    width: 90px;
+    text-align: right;
+    color: var(--accent);
+    font-weight: 700;
+}
+
+.reports-page .summary-cards .card[aria-label="Feedback summary"] strong {
+    color: var(--text-strong);
+}
+
+/* ReportsHome controls row (scoped) */
+.reports-page .reports-controls {
+    margin: 16px 0;
+}
+
+.reports-page .reports-controls .control-row {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.reports-page .reports-controls label {
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.reports-page .reports-controls select {
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: 1px solid var(--card-border);
+    font-size: 14px;
+    min-width: 220px;
+}
+
+.reports-page .controls-actions button {
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background .15s ease, transform .1s ease;
+}
+
+.reports-page .controls-actions button:hover {
+    transform: translateY(-1px);
+}
+
+.reports-page .btn-primary {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+}
+
+.reports-page .btn-primary:hover {
+    background: #0c8c8b;
+}
+
+.reports-page .btn-secondary {
+    background: #f8fafc;
+    border: 1px solid var(--card-border);
+    color: var(--text-strong);
+}
+
+.reports-page .btn-secondary:hover {
+    background: #eef2f7;
+}
+
+/* Quick links cards (scoped) */
+.reports-page .quick-links {
+    margin-top: 24px;
+}
+
+.reports-page .quick-links .cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.reports-page .quick-links .card {
+    flex: 1 1 200px;
+    background: var(--panel);
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+    padding: 16px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(11, 18, 32, 0.05);
+    transition: background .15s ease, transform .1s ease;
+}
+
+.reports-page .quick-links .card:hover {
+    background: rgba(14, 165, 164, 0.05);
+    transform: translateY(-2px);
+}
+
+.reports-page .quick-links .card strong {
+    display: block;
+    font-size: 15px;
+    margin-bottom: 6px;
+    color: var(--text-strong);
+}
+
+.reports-page .quick-links .card p {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin: 0;
+}
+
+/* Shared table styling (scoped) */
+.reports-page .table-wrap table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.reports-page .table-wrap th,
+.reports-page .table-wrap td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #f1f5f9;
+    text-align: left;
+}
+
+.reports-page .table-wrap th {
+    background: #fbfdff;
+    font-weight: 700;
+}
+
+.reports-page .table-wrap tbody tr:hover {
+    background: rgba(14, 165, 164, 0.03);
+    transition: background .12s ease;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1100px) {
+    .reports-page .chart-container {
+        height: 300px;
+    }
+}
+
+@media (max-width: 880px) {
+    .reports-page .reports-page__inner {
+        padding: 14px;
+        font-size: 14px;
+    }
+
+    .reports-page .summary-cards {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .reports-page .chart-container {
+        height: 260px;
+    }
+
+    .reports-page .chart-container.time-series {
+        height: 300px;
+    }
+
+    .reports-page .table-wrap table {
+        font-size: 13px;
+    }
+
+    .reports-page .reports-controls .control-row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .reports-page .summary-cards .card {
+        min-height: auto;
+    }
+
+    .reports-page .table-wrap td:nth-child(2),
+    .reports-page .table-wrap td:nth-child(3) {
+        width: 90px;
+        font-size: 14px;
+    }
+
+    .reports-page .controls-actions {
+        flex-wrap: wrap;
+    }
+
+    .reports-page .controls-actions button {
+        flex: 1 1 auto;
+    }
+
+    .reports-page .quick-links .cards {
+        flex-direction: column;
+    }
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+
+    .reports-page .btn-primary,
+    .reports-page .btn-secondary,
+    .reports-page .quick-links .card {
+        transition: none !important;
+        transform: none !important;
+    }
+}
+
+/* High contrast / forced colors (scoped) */
+@media (forced-colors: active) {
+    .reports-page .reports-page__inner {
+        background: Window;
+        color: WindowText;
+    }
+
+    .reports-page .table-wrap,
+    .reports-page .summary-cards .card {
+        background: Window;
+        border-color: GrayText;
+    }
+}
+
+/* End of file */

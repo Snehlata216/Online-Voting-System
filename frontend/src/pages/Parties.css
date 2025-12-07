@@ -1,0 +1,441 @@
+/* src/pages/Parties.css
+   Updated: prevent action buttons from overlapping description,
+   allow description wrapping, stable actions column, responsive.
+*/
+
+/* Layout base */
+.page-container {
+    padding: 24px;
+    max-width: 1100px;
+    margin: 0 auto;
+    color: #e6eef6;
+    font-family: 'Segoe UI', system-ui, -apple-system, "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+    box-sizing: border-box;
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    gap: 12px;
+}
+
+.page-header h2 {
+    color: #10b981;
+    margin: 0;
+    font-size: 20px;
+}
+
+/* Table wrapper */
+.table-wrapper {
+    background: #0b1220;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    overflow: visible;
+}
+
+/* Table: use auto layout so columns can size naturally */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: auto;
+    /* allow description to expand and wrap */
+    font-size: 14px;
+}
+
+/* Head */
+.table thead {
+    background: #0f172a;
+}
+
+.table th,
+.table td {
+    padding: 12px 14px;
+    border-bottom: 1px solid #1f2937;
+    color: #e6eef6;
+    vertical-align: middle;
+    box-sizing: border-box;
+}
+
+/* Head labels */
+.table th {
+    color: #93c5fd;
+    font-weight: 600;
+    font-size: 14px;
+    text-align: left;
+}
+
+/* Row hover */
+.table tbody tr:hover {
+    background: #0f1a30;
+}
+
+/* Column sizing strategy
+   - Name: flexible but not tiny
+   - Symbol: fixed small
+   - Description: flexible and wraps
+   - Actions: fixed min width so buttons never intrude
+*/
+.table th:first-child,
+.table td:first-child {
+    width: 30%;
+    min-width: 180px;
+}
+
+.table th:nth-child(2),
+.table td:nth-child(2) {
+    width: 10%;
+    max-width: 80px;
+    text-align: center;
+}
+
+.table th:nth-child(3),
+.table td:nth-child(3) {
+    /* allow description to take remaining space and wrap */
+    width: auto;
+    min-width: 220px;
+    white-space: normal;
+    /* allow wrapping */
+    word-break: break-word;
+    overflow-wrap: anywhere;
+}
+
+.table th:last-child,
+.table td:last-child {
+    width: 160px;
+    /* reserve stable space for actions */
+    min-width: 140px;
+    max-width: 220px;
+    text-align: right;
+    white-space: nowrap;
+    /* keep buttons on single line when possible */
+}
+
+/* Muted text */
+.muted {
+    color: #94a3b8;
+    font-style: italic;
+    font-size: 14px;
+}
+
+/* Symbol image */
+.symbol-img {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    object-fit: cover;
+    border: 2px solid #10b981;
+    background: rgba(255, 255, 255, 0.02);
+    display: inline-block;
+}
+
+/* Description cell styling */
+.desc-cell {
+    padding-right: 12px;
+    /* give breathing room before actions */
+    color: #e6eef6;
+    line-height: 1.35;
+    font-size: 14px;
+    white-space: normal;
+    overflow: visible;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+}
+
+/* Buttons base */
+.btn-primary,
+.btn-secondary,
+.btn-small {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: transform .12s ease, background .12s ease, box-shadow .12s ease;
+    text-decoration: none;
+    box-sizing: border-box;
+}
+
+/* Add button */
+.btn-primary {
+    background: #10b981;
+    color: #071022;
+}
+
+.btn-primary:hover {
+    background: #0ea472;
+    transform: translateY(-2px);
+}
+
+/* Secondary */
+.btn-secondary {
+    background: #1e293b;
+    color: #e6eef6;
+}
+
+.btn-secondary:hover {
+    background: #2c3e50;
+}
+
+/* Small buttons */
+.btn-small {
+    padding: 8px 10px;
+    font-size: 14px;
+    background: rgba(255, 255, 255, 0.03);
+    color: #e6eef6;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    min-width: 72px;
+    height: 40px;
+    line-height: 1;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+.btn-small:hover {
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateY(-1px);
+}
+
+/* Edit variant */
+.btn-edit {
+    background: #0f3b30;
+    color: #c6f5e8;
+    border: 1px solid #10b981;
+}
+
+.btn-edit:hover {
+    filter: brightness(1.06);
+}
+
+/* Delete variant */
+.btn-danger {
+    background: #ef4444;
+    color: #fff;
+    border-radius: 8px;
+    padding: 8px 12px;
+    border: none;
+    cursor: pointer;
+    font-weight: 700;
+    transition: background .18s ease, transform .08s ease;
+    height: 40px;
+}
+
+.btn-danger:hover {
+    background: #dc2626;
+    transform: translateY(-1px);
+}
+
+/* Actions container: keep buttons inside reserved column */
+.actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 8px;
+    padding-right: 8px;
+    box-sizing: border-box;
+    overflow: visible;
+}
+
+/* Action buttons wrapper */
+.action-buttons {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: nowrap;
+}
+
+/* Ensure action cell alignment and stacking behavior */
+.table td.actions,
+.table th.actions-col {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 16px;
+    box-sizing: border-box;
+    vertical-align: middle;
+    overflow: visible;
+    z-index: 2;
+}
+
+/* Prevent accidental overlap from other elements */
+.table-wrapper,
+.table,
+.table tbody tr,
+.table td {
+    overflow: visible;
+}
+
+/* Status, loader, empty state */
+.status-msg {
+    padding: 10px 12px;
+    border-radius: 8px;
+    margin-bottom: 12px;
+}
+
+.status-msg.error {
+    background: #432c2c;
+    color: #fecaca;
+}
+
+.status-msg.info {
+    background: #133a34;
+    color: #a7f3d0;
+}
+
+.loader {
+    padding: 24px;
+    text-align: center;
+    color: #93c5fd;
+}
+
+.empty-state {
+    background: #0b1220;
+    border-radius: 12px;
+    padding: 24px;
+    text-align: center;
+}
+
+/* Form */
+.form-page {
+    padding: 24px;
+    max-width: 900px;
+    margin: 0 auto;
+    color: #e6eef6;
+}
+
+.form-card {
+    background: #0b1220;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+.form-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 12px;
+}
+
+.form-header h2 {
+    color: #10b981;
+    margin: 0;
+}
+
+.link-back {
+    color: #93c5fd;
+    text-decoration: none;
+}
+
+.link-back:hover {
+    text-decoration: underline;
+}
+
+/* Toast */
+.toast {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #10b981;
+    color: #071022;
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-weight: 700;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    z-index: 9999;
+}
+
+/* Responsive adjustments */
+@media (max-width: 920px) {
+
+    .table th:first-child,
+    .table td:first-child {
+        width: 36%;
+        min-width: 140px;
+    }
+
+    .table th:nth-child(2),
+    .table td:nth-child(2) {
+        width: 12%;
+        max-width: 80px;
+    }
+
+    .table th:nth-child(3),
+    .table td:nth-child(3) {
+        width: auto;
+        min-width: 160px;
+    }
+
+    .table th:last-child,
+    .table td:last-child {
+        width: 18%;
+        min-width: 120px;
+    }
+}
+
+@media (max-width: 720px) {
+    .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .table th,
+    .table td {
+        padding: 10px 8px;
+        font-size: 13px;
+    }
+
+    .symbol-img {
+        width: 32px;
+        height: 32px;
+    }
+
+    .symbol-img.large {
+        width: 56px;
+        height: 56px;
+    }
+
+    .desc-cell {
+        max-width: 220px;
+        white-space: normal;
+        overflow: visible;
+    }
+
+    /* Stack action buttons vertically on small screens */
+    .action-buttons {
+        flex-direction: column;
+        gap: 6px;
+        align-items: flex-end;
+    }
+
+    .btn-small {
+        width: 100%;
+        text-align: center;
+        min-width: 0;
+        height: 36px;
+    }
+
+    .table th:last-child,
+    .table td:last-child {
+        width: 28%;
+        min-width: 120px;
+    }
+}
+
+/* Accessibility focus states */
+a:focus,
+button:focus,
+.btn-small:focus {
+    outline: 3px solid rgba(16, 185, 129, 0.18);
+    outline-offset: 2px;
+    border-radius: 8px;
+}

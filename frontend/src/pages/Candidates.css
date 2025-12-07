@@ -1,0 +1,59 @@
+/* Candidate list styles */
+.candidate-card {
+    background: #0e1426;
+    border: 1px solid #222a44;
+    border-radius: 12px;
+    padding: 16px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.candidate-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+}
+
+.candidate-name {
+    font-size: 18px;
+    font-weight: 600;
+    color: #10b981;
+}
+
+.candidate-meta {
+    margin: 4px 0;
+    color: #cbd5e1;
+    font-size: 14px;
+}
+
+.candidate-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.candidate-button {
+    border: none;
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.3s ease;
+}
+
+.candidate-edit {
+    background: #10b981;
+    color: #071017;
+}
+
+.candidate-edit:hover {
+    background: #059669;
+}
+
+.candidate-delete {
+    background: #ef4444;
+    color: #fff;
+}
+
+.candidate-delete:hover {
+    background: #dc2626;
+}

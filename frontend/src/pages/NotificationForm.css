@@ -1,0 +1,123 @@
+/* src/pages/NotificationForm.css
+   Styles for admin notification creation form
+   Responsive, accessible, dark theme friendly
+*/
+
+/* Page container */
+.notification-form-page {
+    padding: 20px;
+    max-width: 720px;
+    margin: 0 auto;
+    color: #e6eef8;
+    font-family: "Segoe UI", Roboto, system-ui, -apple-system, "Helvetica Neue", Arial;
+    box-sizing: border-box;
+}
+
+/* Title */
+.notification-form-page h1 {
+    font-size: 1.5rem;
+    color: #10b981;
+    margin-bottom: 16px;
+    text-align: center;
+}
+
+/* Form card */
+.notification-form {
+    display: grid;
+    gap: 12px;
+    background: linear-gradient(180deg, #071022 0%, #0b1220 100%);
+    padding: 18px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    box-shadow: 0 8px 20px rgba(2, 6, 23, 0.45);
+}
+
+/* Labels and inputs */
+.notification-form label {
+    font-weight: 600;
+    color: #cbd5e1;
+    font-size: 0.95rem;
+}
+
+.notification-form input,
+.notification-form textarea {
+    background: #071022;
+    color: #e6eef8;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 0.95rem;
+    width: 100%;
+    box-sizing: border-box;
+    transition: box-shadow 0.12s ease, border-color 0.12s ease;
+}
+
+.notification-form input::placeholder,
+.notification-form textarea::placeholder {
+    color: #94a3b8;
+}
+
+/* Focus states */
+.notification-form input:focus,
+.notification-form textarea:focus {
+    outline: none;
+    border-color: #10b981;
+    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.08);
+}
+
+/* Actions */
+.form-actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 6px;
+}
+
+.btn-primary {
+    background: #10b981;
+    color: #071022;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.08s ease, box-shadow 0.12s ease;
+}
+
+.btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 20px rgba(16, 185, 129, 0.12);
+}
+
+.btn-primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Status message */
+.notification-status {
+    margin-top: 12px;
+    text-align: center;
+    font-size: 0.95rem;
+    padding: 8px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.02);
+    color: #cbd5e1;
+}
+
+/* Responsive adjustments */
+@media (max-width: 520px) {
+    .notification-form-page {
+        padding: 12px;
+    }
+
+    .notification-form {
+        padding: 14px;
+        gap: 10px;
+    }
+
+    .btn-primary {
+        width: 100%;
+    }
+}

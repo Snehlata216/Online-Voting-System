@@ -1,0 +1,25 @@
+/* Voter form styles (inputs reuse global .input) */
+.voter-form {
+    display: grid;
+    gap: 14px;
+    max-width: 600px;
+}
+
+.voter-form input,
+.voter-form textarea,
+.voter-form select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #253053;
+    background: #0e1426;
+    color: #e5e7eb;
+}
+
+.voter-form input:focus,
+.voter-form textarea:focus,
+.voter-form select:focus {
+    outline: none;
+    border-color: #10b981;
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+}

@@ -1,0 +1,95 @@
+/* Admins.css
+   Styles for the Admins list page
+   - Card grid layout
+   - Action buttons
+   - Responsive design
+*/
+
+.page {
+    padding: 24px;
+    background: #0f172a;
+    min-height: 100vh;
+    color: #e5e7eb;
+    font-family: "Inter", system-ui, sans-serif;
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+}
+
+.page-header h1 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #10b981;
+}
+
+.button {
+    padding: 8px 14px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    background: #10b981;
+    color: #0f172a;
+    transition: background 0.2s ease;
+}
+
+.button:hover {
+    background: #34d399;
+}
+
+.button.edit {
+    background: #3b82f6;
+    color: #fff;
+}
+
+.button.edit:hover {
+    background: #60a5fa;
+}
+
+.button.danger {
+    background: #ef4444;
+    color: #fff;
+}
+
+.button.danger:hover {
+    background: #f87171;
+}
+
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 16px;
+}
+
+.admin-card {
+    background: linear-gradient(135deg, #1e293b, #0f172a);
+    border: 1px solid #334155;
+    border-radius: 12px;
+    padding: 16px;
+    color: #e5e7eb;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.admin-name {
+    font-size: 18px;
+    font-weight: 600;
+    color: #a7f3d0;
+}
+
+.admin-meta {
+    font-size: 14px;
+    color: #94a3b8;
+}
+
+.admin-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 12px;
+}

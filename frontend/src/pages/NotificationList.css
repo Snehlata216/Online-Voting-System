@@ -1,0 +1,300 @@
+/* src/pages/NotificationList.css
+   Responsive styles for NotificationList.jsx
+   - Desktop: table layout
+   - Tablet / Mobile: stacked card layout
+   - Accessible focus states, truncation, and utility classes
+*/
+
+/* Design tokens */
+:root {
+    --bg-page: #071022;
+    --card-bg: #0b1220;
+    --muted: #94a3b8;
+    --text: #e6eef8;
+    --accent: #10b981;
+    --accent-strong: #0f172a;
+    --danger: #ef4444;
+    --surface-2: rgba(255, 255, 255, 0.03);
+    --radius: 10px;
+    --shadow: 0 8px 24px rgba(2, 6, 23, 0.55);
+    --glass: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+}
+
+/* Page container */
+.notification-list-page {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    color: var(--text);
+    font-family: "Segoe UI", Roboto, system-ui, -apple-system, "Helvetica Neue", Arial;
+    box-sizing: border-box;
+    background: transparent;
+}
+
+/* Heading */
+.notification-list-page h1 {
+    font-size: 1.6rem;
+    color: var(--accent);
+    margin: 0 0 14px;
+}
+
+/* Toolbar */
+.toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+}
+
+.toolbar .left,
+.toolbar .right {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+/* Buttons */
+.btn-primary,
+.btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 14px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 0.95rem;
+    transition: transform 0.08s ease, box-shadow 0.12s ease, opacity 0.12s ease;
+}
+
+.btn-primary {
+    background: var(--accent);
+    color: var(--accent-strong);
+    box-shadow: 0 8px 18px rgba(16, 185, 129, 0.12);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+}
+
+.btn-secondary {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--surface-2);
+}
+
+.btn-small {
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+}
+
+/* Status message */
+.notification-status {
+    color: var(--muted);
+    background: var(--surface-2);
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 0.95rem;
+}
+
+/* Table container */
+.notification-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+}
+
+/* Table header */
+.notification-table thead {
+    background: rgba(7, 16, 34, 0.6);
+}
+
+.notification-table th {
+    text-align: left;
+    padding: 12px 14px;
+    font-size: 0.95rem;
+    color: #93c5fd;
+    font-weight: 700;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+/* Table body cells */
+.notification-table td {
+    padding: 12px 14px;
+    vertical-align: middle;
+    color: var(--text);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    font-size: 0.95rem;
+}
+
+/* Message truncation */
+.message-cell {
+    max-width: 420px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Row hover and focus */
+.notification-table tbody tr:hover {
+    background: rgba(16, 185, 129, 0.03);
+}
+
+.notification-table tbody tr:focus-within {
+    outline: 2px solid rgba(16, 185, 129, 0.12);
+    outline-offset: -2px;
+}
+
+/* Empty state */
+.notification-empty {
+    text-align: center;
+    padding: 28px;
+    color: var(--muted);
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 10px;
+}
+
+/* Responsive: stacked cards on narrow screens */
+@media (max-width: 880px) {
+
+    .notification-table,
+    .notification-table thead,
+    .notification-table tbody,
+    .notification-table th,
+    .notification-table td,
+    .notification-table tr {
+        display: block;
+    }
+
+    .notification-table thead {
+        display: none;
+    }
+
+    .notification-table tbody tr {
+        margin-bottom: 12px;
+        background: linear-gradient(180deg, rgba(11, 18, 32, 0.9), rgba(7, 12, 20, 0.9));
+        border-radius: 10px;
+        padding: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.04);
+        box-shadow: 0 6px 18px rgba(2, 6, 23, 0.45);
+    }
+
+    .notification-table td {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 10px;
+        border: none;
+    }
+
+    .notification-table td::before {
+        content: attr(data-label);
+        flex: 0 0 36%;
+        color: #93c5fd;
+        font-weight: 700;
+        margin-right: 8px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .message-cell {
+        white-space: normal;
+        max-width: 100%;
+    }
+
+    .toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .toolbar .left,
+    .toolbar .right {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .btn-primary,
+    .btn-secondary {
+        width: auto;
+    }
+}
+
+/* Very small screens */
+@media (max-width: 420px) {
+    .notification-list-page {
+        padding: 12px;
+    }
+
+    .btn-primary,
+    .btn-secondary {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .notification-table tbody tr {
+        padding: 10px;
+    }
+
+    .notification-table td::before {
+        flex-basis: 40%;
+    }
+}
+
+/* Accessibility: focus styles for keyboard users */
+button:focus,
+a:focus {
+    outline: 3px solid rgba(59, 130, 246, 0.18);
+    outline-offset: 2px;
+}
+
+/* Utilities */
+.muted {
+    color: var(--muted);
+    font-size: 0.9rem;
+}
+
+.small {
+    font-size: 0.85rem;
+    color: var(--muted);
+}
+
+/* Timestamp small */
+.timestamp {
+    font-size: 0.85rem;
+    color: var(--muted);
+}
+
+/* Action group spacing */
+.action-group {
+    display: inline-flex;
+    gap: 8px;
+    align-items: center;
+}
+
+/* Badge for unread */
+.unread-badge {
+    display: inline-block;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 6px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--accent-strong);
+    background: var(--accent);
+    border-radius: 999px;
+    text-align: center;
+}
+
+/* Reduce motion preference */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        transition: none !important;
+    }
+}

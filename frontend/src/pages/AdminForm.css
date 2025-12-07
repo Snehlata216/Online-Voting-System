@@ -1,0 +1,76 @@
+/* AdminForm.css
+   Styles for the New Admin form page
+   - Dark theme inputs
+   - Clear form actions
+   - Responsive layout
+*/
+
+.page {
+    padding: 24px;
+    background: #0f172a;
+    min-height: 100vh;
+    color: #e5e7eb;
+    font-family: "Inter", system-ui, sans-serif;
+}
+
+.page h1 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #10b981;
+    margin-bottom: 20px;
+}
+
+.admin-form {
+    max-width: 480px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.input {
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #334155;
+    background: #1e293b;
+    color: #e5e7eb;
+    font-size: 15px;
+}
+
+.input:focus {
+    outline: none;
+    border-color: #10b981;
+}
+
+.form-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 8px;
+}
+
+.button {
+    flex: 1;
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 15px;
+    background: #10b981;
+    color: #0f172a;
+    transition: background 0.2s ease;
+}
+
+.button:hover {
+    background: #34d399;
+}
+
+.button.ghost {
+    background: #1e293b;
+    color: #e5e7eb;
+    border: 1px solid #334155;
+}
+
+.button.ghost:hover {
+    background: #334155;
+}

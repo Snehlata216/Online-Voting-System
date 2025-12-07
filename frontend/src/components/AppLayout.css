@@ -1,0 +1,32 @@
+/* AppLayout.css
+   Keeps the navbar visible and ensures content doesn't hide behind it.
+   Adjust padding-top if your Navbar height changes on mobile.
+*/
+
+.app-layout {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background: #0f172a;
+    color: #e5e7eb;
+    box-sizing: border-box;
+}
+
+/* Main content area: centered and responsive */
+.app-content {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px 16px;
+    box-sizing: border-box;
+    padding-top: 72px;
+    /* matches sticky navbar height */
+}
+
+/* If your Navbar becomes taller on mobile, increase this */
+@media (max-width: 880px) {
+    .app-content {
+        padding: 16px 12px;
+        padding-top: 88px;
+    }
+}

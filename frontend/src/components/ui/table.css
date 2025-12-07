@@ -1,0 +1,79 @@
+/* src/components/ui/table.css */
+.table-responsive {
+    width: 100%;
+    overflow: auto;
+    border-radius: 8px;
+}
+
+.ui-table {
+    width: 100%;
+    border-collapse: collapse;
+    color: #e6eef8;
+    background: transparent;
+}
+
+.ui-table thead th {
+    text-align: left;
+    padding: 10px 12px;
+    font-weight: 700;
+    color: #93c5fd;
+    background: rgba(7, 16, 34, 0.6);
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+.ui-table tbody td {
+    padding: 10px 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    vertical-align: middle;
+}
+
+.empty-row .empty-cell {
+    padding: 24px;
+    text-align: center;
+    color: #94a3b8;
+}
+
+/* Responsive stacked rows for small screens */
+@media (max-width: 880px) {
+
+    .ui-table,
+    .ui-table thead,
+    .ui-table tbody,
+    .ui-table th,
+    .ui-table td,
+    .ui-table tr {
+        display: block;
+    }
+
+    .ui-table thead {
+        display: none;
+    }
+
+    .ui-table tbody tr {
+        margin-bottom: 12px;
+        background: linear-gradient(180deg, rgba(11, 18, 32, 0.9), rgba(7, 12, 20, 0.9));
+        padding: 12px;
+        border-radius: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .ui-table tbody td {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 10px;
+        border: none;
+    }
+
+    .ui-table tbody td::before {
+        content: attr(data-label);
+        flex: 0 0 40%;
+        color: #93c5fd;
+        font-weight: 700;
+        margin-right: 8px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}
