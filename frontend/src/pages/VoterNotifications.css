@@ -1,132 +1,168 @@
 /* src/pages/VoterNotifications.css
-   Voter inbox styles
-   Card list layout, readable typography, responsive
+   Styling aligned with VoterNotifications.jsx
+   - Semantic main/section layout
+   - Clear read/unread states
+   - Responsive grid
 */
 
-/* Container */
-.voter-notifications-page {
-    padding: 20px;
-    max-width: 820px;
+:root {
+    --bg: #0f172a;
+    --panel: #0b1220;
+    --border: #334155;
+    --text: #e5e7eb;
+    --muted: #94a3b8;
+    --accent: #10b981;
+    --danger: #ef4444;
+    --radius: 10px;
+    --gap: 12px;
+    --max-width: 960px;
+    --shadow: 0 10px 30px rgba(2, 6, 23, 0.6);
+}
+
+.vn-root {
+    min-height: 100vh;
+    background: var(--bg);
+    color: var(--text);
+    padding: 18px;
+    box-sizing: border-box;
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+.vn-container {
+    max-width: var(--max-width);
     margin: 0 auto;
-    color: #e6eef8;
-    font-family: "Segoe UI", Roboto, system-ui, -apple-system, "Helvetica Neue", Arial;
+    width: 100%;
+    padding: 8px;
     box-sizing: border-box;
 }
 
-/* Heading */
-.voter-notifications-page h1 {
-    font-size: 1.5rem;
-    color: #10b981;
-    margin-bottom: 14px;
-    text-align: left;
+.vn-title {
+    color: var(--accent);
+    font-size: 22px;
+    font-weight: 700;
+    margin: 0 0 12px 0;
 }
 
-/* Toolbar */
-.toolbar {
-    display: flex;
-    justify-content: flex-end;
-    gap: 12px;
-    margin-bottom: 12px;
+.vn-status {
+    color: var(--muted);
+    margin: 8px 0 14px 0;
+    font-size: 14px;
 }
 
-/* Status */
-.notification-status {
-    margin: 8px 0 16px;
-    text-align: center;
-    color: #cbd5e1;
-    padding: 8px 10px;
-    border-radius: 8px;
-    background: rgba(255, 255, 255, 0.02);
-}
-
-/* List */
-.notification-list {
+/* List layout */
+.vn-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
     display: grid;
-    gap: 12px;
+    gap: var(--gap);
 }
 
-/* Item card */
-.notification-item {
-    background: #0f172a;
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    border-radius: 12px;
+/* Notification card */
+.vn-item {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
     padding: 14px;
-    box-shadow: 0 6px 14px rgba(2, 6, 23, 0.35);
+    box-sizing: border-box;
+    box-shadow: var(--shadow);
+    transition: transform .12s ease, box-shadow .12s ease;
 }
 
-.notification-item.read {
-    opacity: 0.75;
+.vn-item:hover,
+.vn-item:focus-within {
+    transform: translateY(-4px);
+    box-shadow: 0 18px 40px rgba(2, 6, 23, 0.75);
 }
 
-/* Header row inside card */
-.item-header {
+/* Read/unread cues */
+.vn-item.unread {
+    border-left: 4px solid var(--accent);
+    background: linear-gradient(180deg, rgba(16, 185, 129, 0.08), rgba(255, 255, 255, 0.005));
+}
+
+.vn-item.read {
+    opacity: 0.85;
+}
+
+/* Header row */
+.vn-header {
     display: flex;
-    justify-content: space-between;
     align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
     margin-bottom: 8px;
 }
 
-.item-title {
+.vn-header h3 {
+    margin: 0;
+    font-size: 16px;
+    color: #a7f3d0;
     font-weight: 700;
-    color: #93c5fd;
-    font-size: 1rem;
 }
 
-.item-date {
-    color: #a3a3a3;
-    font-size: 0.85rem;
+.vn-time {
+    color: var(--muted);
+    font-size: 12px;
+    white-space: nowrap;
 }
 
-/* Message */
-.item-message {
-    margin: 6px 0 10px;
-    color: #dbeafe;
-    line-height: 1.4;
-    font-size: 0.95rem;
+/* Message body */
+.vn-message {
+    margin: 8px 0;
+    color: var(--text);
+    line-height: 1.45;
+    font-size: 14px;
+    word-break: break-word;
 }
 
-/* Buttons */
-.btn-primary.btn-small {
-    background: #10b981;
+/* Action button */
+.vn-mark {
+    background: var(--accent);
     color: #071022;
-    border: none;
-    padding: 6px 10px;
-    border-radius: 8px;
     font-weight: 700;
+    padding: 8px 10px;
+    border-radius: 8px;
+    border: none;
     cursor: pointer;
+    margin-top: 8px;
 }
 
-.btn-primary.btn-small:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
+.vn-mark:hover {
+    transform: translateY(-2px);
 }
 
-/* Responsive tweaks */
-@media (max-width: 520px) {
-    .voter-notifications-page {
-        padding: 12px;
+/* Responsive adjustments */
+@media (max-width: 640px) {
+    .vn-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
     }
 
-    .item-title {
-        font-size: 0.98rem;
+    .vn-title {
+        font-size: 20px;
     }
 
-    .item-message {
-        font-size: 0.95rem;
-    }
-
-    .toolbar {
-        justify-content: center;
-    }
-
-    .btn-primary.btn-small {
-        width: 100%;
+    .vn-message {
+        font-size: 15px;
     }
 }
 
-/* Accessibility focus */
-button:focus,
-a:focus {
-    outline: 3px solid rgba(59, 130, 246, 0.18);
-    outline-offset: 2px;
+@media (min-width: 900px) {
+    .vn-list {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+    }
+}
+
+/* Accessibility focus outline */
+.vn-item:focus {
+    outline: 3px solid rgba(16, 185, 129, 0.3);
+    outline-offset: 4px;
+}
+
+/* Debug helper (remove in production) */
+.vn-list.debug {
+    border: 1px dashed rgba(255, 255, 255, 0.2);
 }

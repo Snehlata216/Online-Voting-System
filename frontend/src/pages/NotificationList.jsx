@@ -1,143 +1,74 @@
 // src/pages/NotificationList.jsx
+// Admin view: responsive table of all notifications.
+// Expects GET /api/notifications to return an array.
+
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { getAllNotifications, markAsRead, deleteNotification } from "../api/notifications";
+import axios from "axios";
 import "./NotificationList.css";
 
 export default function NotificationList() {
-  const [notifications, setNotifications] = useState([]); // always an array
-  const [loading, setLoading] = useState(false);
+  const [notifications, setNotifications] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [status, setStatus] = useState("");
-  const [processingId, setProcessingId] = useState(null);
-
-  const navigate = useNavigate();
-
-  const load = async () => {
-    setLoading(true);
-    setStatus("");
-    try {
-      const res = await getAllNotifications();
-      // Normalize response: accept array or wrapper { notifications: [...] }
-      const items = Array.isArray(res?.data)
-        ? res.data
-        : Array.isArray(res?.data?.notifications)
-        ? res.data.notifications
-        : [];
-      setNotifications(items);
-      if (items.length === 0) setStatus("No notifications yet.");
-    } catch (err) {
-      console.error("Failed to load notifications:", err);
-      setStatus(err?.response?.data?.message || "Failed to load notifications.");
-      setNotifications([]);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   useEffect(() => {
-    load();
+    const fetchAll = async () => {
+      setLoading(true);
+      setStatus("");
+      try {
+        const res = await axios.get("/api/notifications");
+        const data = Array.isArray(res.data) ? res.data : res.data?.notifications ?? [];
+        setNotifications(data);
+        if (!data.length) setStatus("No notifications found.");
+      } catch (err) {
+        console.error("Failed to load notifications", err);
+        setStatus("❌ Failed to load notifications");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchAll();
   }, []);
 
-  const handleMarkRead = async (id) => {
-    setProcessingId(id);
-    setStatus("");
-    try {
-      await markAsRead(id);
-      setNotifications((prev) => prev.map((n) => (n.notificationId === id ? { ...n, isRead: true } : n)));
-      setStatus("Marked as read.");
-    } catch (err) {
-      console.error("Failed to mark as read:", err);
-      setStatus(err?.response?.data?.message || "Failed to mark as read.");
-    } finally {
-      setProcessingId(null);
-    }
-  };
-
-  const handleDelete = async (id) => {
-    if (!window.confirm("Delete this notification?")) return;
-    setProcessingId(id);
-    setStatus("");
-    try {
-      await deleteNotification(id);
-      setNotifications((prev) => prev.filter((n) => n.notificationId !== id));
-      setStatus("Notification deleted.");
-    } catch (err) {
-      console.error("Failed to delete notification:", err);
-      setStatus(err?.response?.data?.message || "Failed to delete.");
-    } finally {
-      setProcessingId(null);
-    }
-  };
-
-  const goToCreate = () => {
-    navigate("/notifications/new");
-  };
-
   return (
-    <div className="notification-list-page">
-      <h1>All Notifications</h1>
+    <div className="nl-root">
+      <div className="nl-container">
+        <h1 className="nl-title">All Notifications</h1>
+        {loading && <p className="nl-status">Loading...</p>}
+        {status && <p className="nl-status">{status}</p>}
 
-      <div className="toolbar">
-        <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
-          <button className="btn-primary" onClick={goToCreate}>New Notification</button>
-          <button className="btn-secondary" onClick={load} disabled={loading}>
-            {loading ? "Refreshing..." : "Refresh"}
-          </button>
-        </div>
+        {!loading && notifications.length > 0 && (
+          <div className="nl-table-wrap">
+            <table className="nl-table" role="table" aria-label="Notifications">
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th className="hide-sm">Message</th>
+                  <th>Time</th>
+                  <th className="hide-sm">Target</th>
+                  <th>Read</th>
+                </tr>
+              </thead>
+              <tbody>
+                {notifications.map((n) => {
+                  const id = n.notificationId ?? n.id ?? n.notificationId;
+                  const target = n.voterId ?? (n.targetVoterIds ? (Array.isArray(n.targetVoterIds) ? `${n.targetVoterIds.length} voter(s)` : String(n.targetVoterIds)) : "All voters");
+                  const isRead = typeof n.isRead === "boolean" ? n.isRead : (n.isRead === 1 || n.isRead === "1");
+                  return (
+                    <tr key={id} className={isRead ? "read" : "unread"}>
+                      <td className="td-title">{n.title}</td>
+                      <td className="td-message hide-sm">{n.message}</td>
+                      <td className="td-time">{n.createdAt ? new Date(n.createdAt).toLocaleString() : "-"}</td>
+                      <td className="td-target hide-sm">{target}</td>
+                      <td className="td-read">{isRead ? "Yes" : "No"}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
-
-      {status && <p className="notification-status">{status}</p>}
-
-      {loading ? (
-        <p className="notification-status">Loading...</p>
-      ) : !Array.isArray(notifications) || notifications.length === 0 ? (
-        <p className="notification-status">No notifications yet.</p>
-      ) : (
-        <table className="notification-table" role="table">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Voter ID</th>
-              <th>Title</th>
-              <th>Message</th>
-              <th>Status</th>
-              <th>Created</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {notifications.map((n) => (
-              <tr key={n.notificationId}>
-                <td>{n.notificationId}</td>
-                <td>{n.voterId ?? "—"}</td>
-                <td>{n.title}</td>
-                <td className="message-cell" title={n.message}>{n.message}</td>
-                <td>{n.isRead ? "Read" : "Unread"}</td>
-                <td>{n.createdAt ? new Date(n.createdAt).toLocaleString() : "—"}</td>
-                <td>
-                  {!n.isRead && (
-                    <button
-                      className="btn-primary btn-small"
-                      onClick={() => handleMarkRead(n.notificationId)}
-                      disabled={processingId === n.notificationId}
-                    >
-                      {processingId === n.notificationId ? "Processing..." : "Mark as read"}
-                    </button>
-                  )}
-                  <button
-                    className="btn-secondary btn-small"
-                    onClick={() => handleDelete(n.notificationId)}
-                    disabled={processingId === n.notificationId}
-                    style={{ marginLeft: 8 }}
-                  >
-                    {processingId === n.notificationId ? "Processing..." : "Delete"}
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
     </div>
   );
 }

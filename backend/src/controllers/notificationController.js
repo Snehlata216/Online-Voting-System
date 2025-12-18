@@ -1,38 +1,80 @@
 // src/controllers/notificationController.js
 import Notification from "../models/Notification.js";
+import sequelize from "../config/db.js";
 
-// Create new notification
+// Create new notification (supports broadcast and targeted)
 export const createNotification = async (req, res) => {
   try {
-    const { voterId, title, message } = req.body;
-    const notification = await Notification.create({ voterId, title, message });
-    res.status(201).json({ success: true, notification });
+    const { title, message, targetVoterIds } = req.body;
+
+    if (!title || !message) {
+      return res.status(400).json({ success: false, message: "Title and message are required" });
+    }
+
+    // Targeted: insert one row per voter
+    if (Array.isArray(targetVoterIds) && targetVoterIds.length > 0) {
+      await sequelize.transaction(async (t) => {
+        const inserts = targetVoterIds.map((voterId) =>
+          Notification.create(
+            { voterId: String(voterId), title, message, isRead: false },
+            { transaction: t }
+          )
+        );
+        await Promise.all(inserts);
+      });
+
+      return res.status(201).json({ success: true, message: "Notifications sent to selected voters" });
+    }
+
+    // Broadcast: insert one row with voterId = NULL
+    const notification = await Notification.create({ voterId: null, title, message, isRead: false });
+    return res.status(201).json({ success: true, notification });
   } catch (error) {
     console.error("Error creating notification:", error);
     res.status(500).json({ success: false, message: "Error creating notification" });
   }
 };
 
-// Get all notifications
+// Get all notifications (admin view)
 export const getAllNotifications = async (req, res) => {
   try {
     const notifications = await Notification.findAll({ order: [["createdAt", "DESC"]] });
-    res.json({ success: true, notifications });
+    res.json(notifications); // return plain array for frontend
   } catch (error) {
     console.error("Error fetching notifications:", error);
     res.status(500).json({ success: false, message: "Error fetching notifications" });
   }
 };
 
-// Get notifications by voter
+// Get notifications by voter (includes broadcast)
 export const getNotificationsByVoter = async (req, res) => {
   try {
     const { voterId } = req.params;
-    const notifications = await Notification.findAll({ where: { voterId }, order: [["createdAt", "DESC"]] });
-    res.json({ success: true, notifications });
+    const notifications = await Notification.findAll({
+      where: { voterId: [voterId, null] }, // targeted + broadcast
+      order: [["createdAt", "DESC"]],
+    });
+    res.json(notifications);
   } catch (error) {
     console.error("Error fetching voter notifications:", error);
     res.status(500).json({ success: false, message: "Error fetching voter notifications" });
+  }
+};
+
+// Get unread count for a voter (for menu badge)
+export const getUnreadCount = async (req, res) => {
+  try {
+    const { voterId } = req.params;
+    const count = await Notification.count({
+      where: {
+        voterId: [voterId, null],
+        isRead: false,
+      },
+    });
+    res.json({ count });
+  } catch (error) {
+    console.error("Error fetching unread count:", error);
+    res.status(500).json({ success: false, message: "Error fetching unread count" });
   }
 };
 

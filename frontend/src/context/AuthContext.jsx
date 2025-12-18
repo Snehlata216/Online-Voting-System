@@ -1,7 +1,6 @@
 // src/context/AuthContext.jsx
 // Stores the logged-in user in sessionStorage with role-based expiry.
-// Forces fresh fetches (cache: "no-store") to avoid 304 No Body during development.
-// Exposes setAuth, logout, and refreshUser utilities.
+// Exposes { user, setAuth, logout, refreshUser } via context.
 
 import React, { createContext, useEffect, useState, useCallback } from "react";
 
@@ -42,8 +41,6 @@ export default function AuthProvider({ children }) {
     }
   });
 
-  // Refresh user data from server.
-  // Dev-safe: always use cache: "no-store" when forceNoCache is true (default here).
   const refreshUser = useCallback(async (opts = { forceNoCache: true }) => {
     try {
       const cachedRaw = sessionStorage.getItem("user");
@@ -63,7 +60,6 @@ export default function AuthProvider({ children }) {
       const res = await fetch(`/api/voters/${voterId}`, fetchOptions);
 
       if (!res.ok) {
-        // Keep existing cached user on error
         return null;
       }
 
@@ -78,7 +74,6 @@ export default function AuthProvider({ children }) {
     }
   }, []);
 
-  // Persist normalized auth into sessionStorage and state
   const setAuth = useCallback(
     (auth) => {
       if (!auth) {
@@ -92,26 +87,22 @@ export default function AuthProvider({ children }) {
       sessionStorage.setItem("user", JSON.stringify(normalized));
       setUser(normalized);
 
-      // Immediately refresh from server after login to ensure we have freshest fields
-      // and to align any server-side changes (roles, badges, etc.)
       (async () => {
         try {
           await refreshUser({ forceNoCache: true });
         } catch {
-          // ignore refresh errors here; we already set the normalized user
+          // ignore refresh errors here
         }
       })();
     },
     [refreshUser]
   );
 
-  // Clear auth
   const logout = useCallback(() => {
     sessionStorage.removeItem("user");
     setUser(null);
   }, []);
 
-  // On mount: if we have a cached user, refresh with no-store to avoid 304
   useEffect(() => {
     let mounted = true;
     (async () => {
@@ -121,18 +112,15 @@ export default function AuthProvider({ children }) {
         const parsed = JSON.parse(raw);
         if (!parsed) return;
 
-        // If cached session expired, clear it immediately
         if (parsed.expiresAt && parsed.expiresAt < Date.now()) {
           sessionStorage.removeItem("user");
           if (mounted) setUser(null);
           return;
         }
 
-        // Only attempt refresh if we have a voterId (preserves original behavior)
         if (parsed.voterId) {
           const refreshed = await refreshUser({ forceNoCache: true });
           if (!refreshed && mounted) {
-            // Extend expiry to keep user logged in if refresh fails
             const extended = { ...parsed, expiresAt: computeExpiry(parsed.role) };
             sessionStorage.setItem("user", JSON.stringify(extended));
             setUser(extended);

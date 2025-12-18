@@ -1,64 +1,145 @@
 // src/pages/NotificationForm.jsx
-// Admin page to create notifications. Uses createNotification API.
-// Optional voterId targets a single voter; leave empty to broadcast.
+// Admin page to create notifications. Broadcast by default; toggle to target specific voters.
+// Sends payload: { title, message, targetVoterIds: null | [ids] }
 
-import React, { useState } from "react";
-import { createNotification } from "../api/notifications";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import "./NotificationForm.css";
 
 export default function NotificationForm() {
   const [title, setTitle] = useState("");
   const [message, setMessage] = useState("");
-  const [voterId, setVoterId] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [targetToggle, setTargetToggle] = useState(false);
+  const [selectedVoterIds, setSelectedVoterIds] = useState([]);
+  const [voters, setVoters] = useState([]);
+  const [loadingVoters, setLoadingVoters] = useState(false);
+  const [sending, setSending] = useState(false);
   const [status, setStatus] = useState("");
 
-  const onSubmit = async (e) => {
+  // Fetch voters only when admin enables targeting
+  useEffect(() => {
+    const loadVoters = async () => {
+      if (!targetToggle) return;
+      setLoadingVoters(true);
+      try {
+        const res = await axios.get("/api/voters");
+        setVoters(Array.isArray(res.data) ? res.data : res.data?.voters ?? []);
+      } catch (err) {
+        console.error("Failed to load voters", err);
+        setStatus("❌ Failed to load voters");
+      } finally {
+        setLoadingVoters(false);
+      }
+    };
+    loadVoters();
+  }, [targetToggle]);
+
+  const onSelectChange = (e) => {
+    const selected = Array.from(e.target.selectedOptions).map((opt) => opt.value);
+    setSelectedVoterIds(selected);
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setSending(true);
     setStatus("");
-    if (!title.trim() || !message.trim()) {
-      setStatus("Title and message are required.");
-      return;
-    }
 
-    const payload = { title: title.trim(), message: message.trim(), voterId: voterId.trim() || null };
+    const payload = {
+      title,
+      message,
+      targetVoterIds: targetToggle && selectedVoterIds.length ? selectedVoterIds : null,
+    };
 
-    setLoading(true);
     try {
-      await createNotification(payload);
-      setStatus("Notification created.");
+      await axios.post("/api/notifications", payload);
+      setStatus("✅ Notification sent");
       setTitle("");
       setMessage("");
-      setVoterId("");
+      setSelectedVoterIds([]);
+      setTargetToggle(false);
     } catch (err) {
-      console.error(err);
-      setStatus(err?.response?.data?.message || "Failed to create notification.");
+      console.error("Failed to send notification", err);
+      setStatus("❌ Failed to send notification");
     } finally {
-      setLoading(false);
+      setSending(false);
     }
   };
 
   return (
-    <div className="notification-form-page">
-      <h1>Create Notification</h1>
-      <form className="notification-form" onSubmit={onSubmit} noValidate>
-        <label htmlFor="title">Title</label>
-        <input id="title" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Title" required />
+    <div className="nf-root">
+      <div className="nf-card">
+        <h1 className="nf-title">Create Notification</h1>
 
-        <label htmlFor="message">Message</label>
-        <textarea id="message" value={message} onChange={(e) => setMessage(e.target.value)} rows={5} placeholder="Message" required />
+        <form className="nf-form" onSubmit={handleSubmit}>
+          <label htmlFor="title">Title</label>
+          <input
+            id="title"
+            type="text"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="Notification title"
+            required
+          />
 
-        <label htmlFor="voterId">Target Voter ID (optional)</label>
-        <input id="voterId" value={voterId} onChange={(e) => setVoterId(e.target.value)} placeholder="Leave empty to broadcast" />
+          <label htmlFor="message">Message</label>
+          <textarea
+            id="message"
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            placeholder="Write your message"
+            rows={5}
+            required
+          />
 
-        <div className="form-actions">
-          <button type="submit" className="btn-primary" disabled={loading}>
-            {loading ? "Sending..." : "Send Notification"}
+          <div className="nf-toggle-row">
+            <label htmlFor="targetToggle" className="nf-toggle-label">Target specific voters</label>
+            <input
+              id="targetToggle"
+              type="checkbox"
+              checked={targetToggle}
+              onChange={(e) => {
+                setTargetToggle(e.target.checked);
+                if (!e.target.checked) setSelectedVoterIds([]);
+              }}
+            />
+          </div>
+
+          {targetToggle && (
+            <>
+              <label htmlFor="targetVoterIds">Target Voter ID (multi-select)</label>
+              <select
+                id="targetVoterIds"
+                multiple
+                value={selectedVoterIds}
+                onChange={onSelectChange}
+                className="nf-select"
+                aria-label="Select voters"
+              >
+                {loadingVoters ? (
+                  <option>Loading voters…</option>
+                ) : (
+                  voters.map((v) => (
+                    <option key={v.voterId ?? v.id} value={String(v.voterId ?? v.id)}>
+                      {v.voterId ?? v.id} — {v.name ?? v.fullName ?? "Unnamed"}
+                    </option>
+                  ))
+                )}
+              </select>
+              <p className="nf-hint">
+                {selectedVoterIds.length ? `Selected ${selectedVoterIds.length} voter(s)` : "No voters selected"}
+              </p>
+            </>
+          )}
+
+          {!targetToggle && <p className="nf-hint">Broadcasting to all voters</p>}
+
+          <button className="nf-btn" type="submit" disabled={sending}>
+            {sending ? "Sending..." : "Send Notification"}
           </button>
-        </div>
 
-        {status && <p className="notification-status">{status}</p>}
-      </form>
+          {status && <p className="nf-status">{status}</p>}
+        </form>
+      </div>
     </div>
   );
 }
